@@ -66,7 +66,8 @@ def panorama_to_plane(panorama_path, FOV, output_size, yaw, pitch):
 # Generate 20 images with different perspectives
 # Create a unique output folder for each run
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-output_folder = f"output_images_{timestamp}"
+panorama_path = "Image-20250404T180246Z-001/Image/1_colors.png"
+output_folder = f"output_{panorama_path.split('/')[2]}_{timestamp.split('-')[1]}"
 os.makedirs(output_folder, exist_ok=True)
 
 print(f"Saving images to: {output_folder}")
@@ -74,8 +75,8 @@ print(f"Saving images to: {output_folder}")
 # Generate 20 images with different perspectives
 for i, deg in enumerate(np.linspace(0, 360, 20)):  # 20 different angles
     output_image = panorama_to_plane(
-        '/home/chinh-nguyen/MealsRetrieval-ROOMELSA/Image-20250404T180246Z-001/Image/1_colors.png',
-        90, (600, 600), deg, 90
+        panorama_path,
+        90, (1200, 1200), deg, 90
     )
     output_image.save(f"{output_folder}/perspective_{i:02d}.png")
 
