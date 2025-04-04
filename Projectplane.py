@@ -3,17 +3,15 @@ import numpy as np
 from PIL import Image
 from scipy.ndimage import map_coordinates
 import os
+import shutil
 from datetime import datetime
-os.environ["IMAGEIO_FFMPEG_EXE"] = "/usr/bin/ffmpeg" # change it with your ffmpeg dir
 from tqdm import tqdm
 
 def map_to_sphere(x, y, z, yaw_radian, pitch_radian):
-
-
     theta = np.arccos(z / np.sqrt(x ** 2 + y ** 2 + z ** 2))
     phi = np.arctan2(y, x)
 
-    # Apply rotation transformations here
+    # Apply rotation transformations
     theta_prime = np.arccos(np.sin(theta) * np.sin(phi) * np.sin(pitch_radian) +
                             np.cos(theta) * np.cos(pitch_radian))
 
@@ -26,7 +24,7 @@ def map_to_sphere(x, y, z, yaw_radian, pitch_radian):
     return theta_prime.flatten(), phi_prime.flatten()
 
 
-def interpolate_color(coords, img, method='bilinear'):
+def interpolate_color(coords, img, method='bicubic'):
     order = {'nearest': 0, 'bilinear': 1, 'bicubic': 3}.get(method, 1)
     red = map_coordinates(img[:, :, 0], coords, order=order, mode='reflect')
     green = map_coordinates(img[:, :, 1], coords, order=order, mode='reflect')
@@ -63,21 +61,31 @@ def panorama_to_plane(panorama_path, FOV, output_size, yaw, pitch):
 
     return output_image
 
-# Generate 20 images with different perspectives
-# Create a unique output folder for each run
-timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-panorama_path = "Image-20250404T180246Z-001/Image/1_colors.png"
-output_folder = f"output_{panorama_path.split('/')[2]}_{timestamp.split('-')[1]}"
+# Đường dẫn ảnh panorama
+panorama_path = f"Image-20250404T180246Z-001/Image/3_colors (1).png"
+
+# Tạo thư mục output (xóa nếu đã tồn tại)
+output_folder = f"output_{panorama_path.split('/')[2]}"
+if os.path.exists(output_folder):
+    shutil.rmtree(output_folder)
 os.makedirs(output_folder, exist_ok=True)
 
 print(f"Saving images to: {output_folder}")
 
-# Generate 20 images with different perspectives
-for i, deg in enumerate(np.linspace(0, 360, 20)):  # 20 different angles
-    output_image = panorama_to_plane(
-        panorama_path,
-        90, (1200, 1200), deg, 90
-    )
-    output_image.save(f"{output_folder}/perspective_{i:02d}.png")
+# Sinh 20 ảnh với các góc nhìn khác nhau
+for i, deg in enumerate(np.linspace(0, 360, 8)):  
+    yaw = deg  
+    pitch = np.random.randint(60, 120)  
 
-print(f"Saved 20 images in '{output_folder}'")
+    output_image_1 = panorama_to_plane(
+        panorama_path,
+        110, (600, 600), yaw, 60  
+    )
+    output_image_2 = panorama_to_plane(
+        panorama_path,
+        110, (600, 600), yaw, 110  
+    )
+    output_image_1.save(f"{output_folder}/perspective_{i:02d}_1.png")
+    output_image_2.save(f"{output_folder}/perspective_{i:02d}_2.png")
+
+print(f"Done saving images to {output_folder}")
