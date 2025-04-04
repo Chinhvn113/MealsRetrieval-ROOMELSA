@@ -3,7 +3,8 @@ import numpy as np
 from PIL import Image
 from scipy.ndimage import map_coordinates
 import os
-os.environ["IMAGEIO_FFMPEG_EXE"] = "/usr/bin/ffmpeg"
+from datetime import datetime
+os.environ["IMAGEIO_FFMPEG_EXE"] = "/usr/bin/ffmpeg" # change it with your ffmpeg dir
 from tqdm import tqdm
 
 def map_to_sphere(x, y, z, yaw_radian, pitch_radian):
@@ -63,10 +64,15 @@ def panorama_to_plane(panorama_path, FOV, output_size, yaw, pitch):
     return output_image
 
 # Generate 20 images with different perspectives
-output_folder = "output_images"
+# Create a unique output folder for each run
+timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+output_folder = f"output_images_{timestamp}"
 os.makedirs(output_folder, exist_ok=True)
 
-for i, deg in enumerate(np.linspace(0, 360, 30)):  # 20 different angles
+print(f"Saving images to: {output_folder}")
+
+# Generate 20 images with different perspectives
+for i, deg in enumerate(np.linspace(0, 360, 20)):  # 20 different angles
     output_image = panorama_to_plane(
         '/home/chinh-nguyen/MealsRetrieval-ROOMELSA/Image-20250404T180246Z-001/Image/1_colors.png',
         90, (600, 600), deg, 90
