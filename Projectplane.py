@@ -79,11 +79,15 @@ for i, deg in enumerate(np.linspace(0, 360, 8)):
 
     output_image_1 = panorama_to_plane(
         panorama_path,
-        110, (600, 600), yaw, 60  
+        110, (600, 600), yaw, 45  
     )
     output_image_2 = panorama_to_plane(
         panorama_path,
-        110, (600, 600), yaw, 110  
+        110, (600, 600), yaw, 90  
+    )
+    output_image_3 = panorama_to_plane(
+        panorama_path,
+        110, (600, 600), yaw, 135  
     )
     output_image_1.save(f"{output_folder}/perspective_{i:02d}_1.png")
     output_image_2.save(f"{output_folder}/perspective_{i:02d}_2.png")
