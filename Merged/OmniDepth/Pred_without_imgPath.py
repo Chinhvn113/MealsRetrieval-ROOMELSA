@@ -152,16 +152,3 @@ def main(perspective_images, output_path, pretraied_model_path):
         return Panoramic_info
     except:
         print("Perspective_images error")
-
-    # img_path = Path(args.img_path)
-    # if img_path.is_file():
-    #     Depth_arr = save_outputs(args.img_path, os.path.splitext(os.path.basename(args.img_path))[0], trans_totensor, model, trans_rgb, device, args)
-    # elif img_path.is_dir():
-    #     # will change if need Depth Matrix
-    #     for f in glob.glob(args.img_path+'/*'):
-    #         Depth_arr = save_outputs(f, os.path.splitext(os.path.basename(f))[0], trans_totensor, model, trans_rgb, device, args)
-    # else:
-    #     print("invalid file path!")
-    #     sys.exit()
-
-
