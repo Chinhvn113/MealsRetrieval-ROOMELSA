@@ -1,0 +1,1 @@
+download pretrained model from "https://huggingface.co/camenduru/PeRF/blob/main/omnidata_dpt_depth_v2.ckpt"
